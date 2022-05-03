@@ -25,7 +25,7 @@ private:
     size_t m_Level;
     bool m_IsDivided;
 
-    int m_MaxLevel = 9;
+    int m_MaxLevel = 7;
 
     std::vector<DefaultShape*> m_Children;
 

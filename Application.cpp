@@ -50,15 +50,25 @@ void Application::HandleEvents() {
     }
 }
 
+void Application::DrawTime() {
+    sf::Text *m_TimeText = new sf::Text(std::to_string(m_DeltaTime), m_Font, 30);
+    m_TimeText->setFillColor(sf::Color::White);
+    m_TimeText->setPosition(Window.getView().getCenter() + sf::Vector2f(480.0f, -360.f));
+    Window.draw(*m_TimeText);
+}
+
 void Application::Draw() {
     while(Window.isOpen()) {
         HandleEvents();
+        m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
+        m_Clock.restart();
         Window.clear();
         Render2D::MouseUpdate(&Window);
         for (auto obj : m_Objects) {
             obj->Update(&Window);
         }
         m_QuadTree->Draw(Window);
+        DrawTime();
         Window.display();
     }
 }

@@ -15,8 +15,9 @@ public:
 private:
     sf::Clock m_Clock;
     sf::Font m_Font;
-    int m_Count;
+    int m_Count{};
     int m_Capacity = 2;
+    float m_DeltaTime{};
 
     std::vector<DefaultShape*> m_Objects{};
     QuadTree *m_QuadTree;
@@ -26,6 +27,7 @@ private:
     void GenerateField();
     void CreateQuadTree();
     void HandleEvents();
+    void DrawTime();
     void Draw();
 public:
     void Run();
