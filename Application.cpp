@@ -27,7 +27,14 @@ void Application::GenerateField() {
 }
 
 void Application::CreateQuadTree() {
-    m_QuadTree = new QuadTree(Rectangle(Width / 2, Height / 2, Width / 2, Height / 2), m_Capacity, 0);
+    if(Height != Width) {
+        if (Height > Width) {
+            m_QuadTree = new QuadTree(Rectangle(Height / 2, Height / 2, Height / 2, Height / 2), m_Capacity, 0);
+        } else
+        if (Width > Height)
+            m_QuadTree = new QuadTree(Rectangle(Width / 2, Width / 2, Width / 2, Width / 2), m_Capacity, 0);
+    } else 
+        m_QuadTree = new QuadTree(Rectangle(Width / 2, Height / 2, Width / 2, Height / 2), m_Capacity, 0);
 
     for (auto it = m_Objects.begin(); it != m_Objects.end(); it++) {
         m_QuadTree->Insert(*it);
