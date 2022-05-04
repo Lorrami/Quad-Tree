@@ -47,14 +47,21 @@ void Application::HandleEvents() {
         }
         if (event.type == sf::Event::MouseWheelScrolled)
             Render2D::ZoomUpdate(&Window, event);
+        if (sf::Event::MouseButtonPressed && event.key.code == sf::Keyboard::LControl) {
+            m_IsQuadTreeDrawable = true;
+        } 
+        if (sf::Event::MouseButtonPressed && event.key.code == sf::Keyboard::LAlt) {
+            m_IsQuadTreeDrawable = false;
+        } 
     }
 }
 
 void Application::DrawTime() {
-    sf::Text *m_TimeText = new sf::Text(std::to_string(m_DeltaTime), m_Font, 30);
-    m_TimeText->setFillColor(sf::Color::White);
-    m_TimeText->setPosition(Window.getView().getCenter() + sf::Vector2f(480.0f, -360.f));
-    Window.draw(*m_TimeText);
+    sf::Text *time_text = new sf::Text(std::to_string(m_DeltaTime), m_Font, 30);
+    time_text->setFillColor(sf::Color::White);
+    time_text->setScale(sf::Vector2f(m_Scale, m_Scale));
+    time_text->setPosition(Window.getView().getCenter() + sf::Vector2f(360.f * m_Scale, -290.f * m_Scale));
+    Window.draw(*time_text);
 }
 
 void Application::Draw() {
@@ -62,12 +69,14 @@ void Application::Draw() {
         HandleEvents();
         m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
         m_Clock.restart();
+        m_Scale = Window.getView().getSize().x / 1000.f;
         Window.clear();
         Render2D::MouseUpdate(&Window);
         for (auto obj : m_Objects) {
             obj->Update(&Window);
         }
-        m_QuadTree->Draw(Window);
+        if (m_IsQuadTreeDrawable) 
+            m_QuadTree->Draw(Window);
         DrawTime();
         Window.display();
     }

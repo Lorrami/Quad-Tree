@@ -15,9 +15,11 @@ public:
 private:
     sf::Clock m_Clock;
     sf::Font m_Font;
+    float m_Scale = 1.0f;
     int m_Count{};
     int m_Capacity = 2;
     float m_DeltaTime{};
+    bool m_IsQuadTreeDrawable = true;
 
     std::vector<DefaultShape*> m_Objects{};
     QuadTree *m_QuadTree;
