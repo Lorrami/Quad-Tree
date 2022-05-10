@@ -87,7 +87,6 @@ void QuadTree::Find(const Rectangle& area, std::vector<DefaultShape*>& found) co
         for (auto i = 0; i < m_Children.size(); i++) {
             if (area.Intersects(Rectangle(m_Children[i]->X, m_Children[i]->Y, m_Children[i]->Width, m_Children[i]->Height))) {
                 found.push_back(m_Children[i]);
-                Application::Get().VisibleObjectsCount++;
             }
         }
     }

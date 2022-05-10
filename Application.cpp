@@ -105,7 +105,6 @@ void Application::UpdatingThreadFunc() {
         Render2D::MouseUpdate(&Window);
         m_Mutex.lock();
         DataBuffer::DrawableObjects = m_VisibleObjects;
-        VisibleObjectsCount = 0;
         m_VisibleObjects.clear();
         m_Mutex.unlock();
     }

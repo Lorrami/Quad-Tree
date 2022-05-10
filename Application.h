@@ -18,7 +18,6 @@ public:
     sf::RenderWindow Window{sf::VideoMode(1280, 720), "Quad Tree"};
     sf::Vector2f PreviousRealMousePosition;
     sf::Vector2f PreviousViewCenter;
-    size_t VisibleObjectsCount{};
     int Width, Height;
 private:
     sf::Clock m_Clock;
