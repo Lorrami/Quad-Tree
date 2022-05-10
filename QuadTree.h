@@ -5,8 +5,8 @@
 
 struct Rectangle {
     float X, Y;
-    float Height, Width;
-    Rectangle(float x, float y, float height, float width) : X(x), Y(y), Height(height), Width(width) {}
+    float Width, Height;
+    Rectangle(float x, float y, float width, float height) : X(x), Y(y), Width(width), Height(height) {}
 
     bool Intersects(const Rectangle& other) const;
 
@@ -25,7 +25,7 @@ private:
     size_t m_Level;
     bool m_IsDivided;
 
-    int m_MaxLevel = 7;
+    int m_MaxLevel = 9;
 
     std::vector<DefaultShape*> m_Children;
 

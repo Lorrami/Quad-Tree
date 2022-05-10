@@ -1,4 +1,6 @@
 #include "QuadTree.h"
+#include "Application.h"
+#include <iostream>
 
 bool Rectangle::Intersects(const Rectangle& other) const {
     return !(X - Width > other.X + other.Width ||
@@ -9,16 +11,24 @@ bool Rectangle::Intersects(const Rectangle& other) const {
 
 void Rectangle::Draw(sf::RenderTarget& target) {
     static sf::Vertex verteces[5];
-    verteces[0] = sf::Vertex(sf::Vector2f(X - Width, Y - Height), sf::Color::Magenta);
+    verteces[0] = sf::Vertex(sf::Vector2f(X, Y), sf::Color::Magenta);
     verteces[1] = sf::Vertex(sf::Vector2f(X + Width, Y - Height), sf::Color::Magenta);
     verteces[2] = sf::Vertex(sf::Vector2f(X + Width, Y + Height), sf::Color::Magenta);
     verteces[3] = sf::Vertex(sf::Vector2f(X - Width, Y + Height), sf::Color::Magenta);
-    verteces[4] = sf::Vertex(sf::Vector2f(X - Width, Y - Height), sf::Color::Magenta);
+    verteces[4] = sf::Vertex(sf::Vector2f(X, Y), sf::Color::Magenta);
     target.draw(verteces, 5, sf::LineStrip);
+    std::cout << "RECT: " << X << " " << Y << '\n' <<
+                            X + Width << " " << Y - Height << '\n' <<
+                            X + Width << " " << Y + Height << '\n' <<
+                            X - Width << " " << Y + Height << '\n' <<
+                            X << " " << Y << '\n';
+    std::cout << '\n';
+    sf::View view = target.getView();
+    std::cout << "VIEW: " << view.getCenter().x << " " << view.getCenter().y << " " << view.getSize().x << " " << view.getSize().y << '\n';
 }
 
 void QuadTree::SubDivide() {
-    sf::Vector2f half_size = sf::Vector2f(half_size.x = m_Bounds.Width / 2.f, m_Bounds.Height / 2.f);
+    sf::Vector2f half_size = sf::Vector2f(m_Bounds.Width / 2.f, m_Bounds.Height / 2.f);
     m_TopLeft = new QuadTree(Rectangle(m_Bounds.X - half_size.x, m_Bounds.Y - half_size.y, half_size.x, half_size.y),
                          m_Capacity, m_Level + 1);
     m_TopRight = new QuadTree(Rectangle(m_Bounds.X + half_size.x, m_Bounds.Y - half_size.y, half_size.x, half_size.y),
@@ -40,7 +50,7 @@ QuadTree::~QuadTree() {
 }
 
 void QuadTree::Insert(DefaultShape *shape) {
-    if (!m_Bounds.Intersects(Rectangle(shape->X, shape->Y, shape->Height, shape->Width))) {
+    if (!m_Bounds.Intersects(Rectangle(shape->X, shape->Y, shape->Width, shape->Height))) {
 		return;
 	}
     if (!m_IsDivided) {
@@ -75,8 +85,9 @@ void QuadTree::Find(const Rectangle& area, std::vector<DefaultShape*>& found) co
         m_BottomRight->Find(area, found);
     } else {
         for (auto i = 0; i < m_Children.size(); i++) {
-            if (area.Intersects(Rectangle(m_Children[i]->X, m_Children[i]->Y, m_Children[i]->Height, m_Children[i]->Width))) {
+            if (area.Intersects(Rectangle(m_Children[i]->X, m_Children[i]->Y, m_Children[i]->Width, m_Children[i]->Height))) {
                 found.push_back(m_Children[i]);
+                Application::Get().VisibleObjectsCount++;
             }
         }
     }

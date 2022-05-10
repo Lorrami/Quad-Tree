@@ -7,6 +7,7 @@
 
 class Render2D {
 public:
+    static void AreaDrawing(sf::RenderWindow *window, Rectangle *area);
     static void ZoomUpdate(sf::RenderWindow *window, sf::Event event);
     static void MouseUpdate(sf::RenderWindow *window);
     static void RectDrawing(sf::RenderWindow *window, RectangleShape *obj);

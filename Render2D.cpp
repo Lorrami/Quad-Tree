@@ -3,6 +3,18 @@
 #include <iostream>
 #include "Render2D.h"
 
+void Render2D::AreaDrawing(sf::RenderWindow *window, Rectangle *area) {
+    sf::RectangleShape rect;
+    rect.setSize(sf::Vector2f(area->Width, area->Height));
+    rect.setOrigin(sf::Vector2f(area->Width / 2, area->Height / 2));
+    rect.setPosition(sf::Vector2f(area->X, area->Y));
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineColor(sf::Color::Red);
+    rect.setOutlineThickness(4);
+    
+    window->draw(rect);
+}
+
 void Render2D::ZoomUpdate(sf::RenderWindow *window, sf::Event event) {
     sf::View view = window->getView();
     if (event.mouseWheelScroll.delta > 0) {

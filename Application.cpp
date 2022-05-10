@@ -4,6 +4,7 @@
 #include <iostream>
 
 Application *Application::s_Instance = nullptr;
+std::vector<DefaultShape*> DataBuffer::DrawableObjects{};
 
 void Application::GetCount() {
     std::cout << "Enter objects count:";
@@ -63,30 +64,74 @@ void Application::HandleEvents() {
     }
 }
 
-void Application::DrawTime() {
-    sf::Text *time_text = new sf::Text(std::to_string(m_DeltaTime), m_Font, 30);
-    time_text->setFillColor(sf::Color::White);
-    time_text->setScale(sf::Vector2f(m_Scale, m_Scale));
-    time_text->setPosition(Window.getView().getCenter() + sf::Vector2f(360.f * m_Scale, -290.f * m_Scale));
-    Window.draw(*time_text);
+void Application::CheckCount() {
+    m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
+    m_Clock.restart();
+    sf::View view = Window.getView();
+    // for(auto it : m_Objects) {
+    //    if (!(it->X - it->Width > view.getCenter().x + view.getSize().x ||
+    //         it->X + it->Width < view.getCenter().x - view.getSize().y ||
+    //         it->Y - it->Height > view.getCenter().y + view.getSize().x ||
+    //         it->Y + it->Height < view.getCenter().y - view.getSize().y))
+    //     {
+    //         m_VisibleObjects.push_back(it);
+    //         VisibleObjectsCount++;
+    //     }
+    // }
+    m_QuadTree->Find(Rectangle(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2,
+                                view.getSize().x, view.getSize().y), m_VisibleObjects);
 }
 
-void Application::Draw() {
+void Application::DrawCount() {
+    sf::Text count_text = sf::Text("Objects in view: " + std::to_string(DataBuffer::DrawableObjects.size()), m_Font, 30);
+    count_text.setFillColor(sf::Color::White);
+    count_text.setScale(sf::Vector2f(m_Scale, m_Scale));
+    count_text.setPosition(Window.getView().getCenter() + sf::Vector2f(-460.f * m_Scale, -290.f * m_Scale));
+    Window.draw(count_text);
+}
+
+void Application::DrawTime() {
+    sf::Text time_text = sf::Text(std::to_string(m_DeltaTime / 10), m_Font, 30);
+    time_text.setFillColor(sf::Color::White);
+    time_text.setScale(sf::Vector2f(m_Scale, m_Scale));
+    time_text.setPosition(Window.getView().getCenter() + sf::Vector2f(360.f * m_Scale, -290.f * m_Scale));
+    Window.draw(time_text);
+}
+
+void Application::UpdatingThreadFunc() {
+    while (m_IsRunning) {
+        CheckCount();
+        std::cout << "Updating\n";
+        Render2D::MouseUpdate(&Window);
+        m_Mutex.lock();
+        DataBuffer::DrawableObjects = m_VisibleObjects;
+        VisibleObjectsCount = 0;
+        m_VisibleObjects.clear();
+        m_Mutex.unlock();
+    }
+}
+
+void Application::DrawingThreadFunc() {
     while(Window.isOpen()) {
         HandleEvents();
-        m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
-        m_Clock.restart();
+        std::cout << "Drawing\n";
         m_Scale = Window.getView().getSize().x / 1000.f;
+
         Window.clear();
-        Render2D::MouseUpdate(&Window);
-        for (auto obj : m_Objects) {
+        m_Mutex.lock();
+        for (auto obj : DataBuffer::DrawableObjects) {
             obj->Update(&Window);
         }
         if (m_IsQuadTreeDrawable) 
             m_QuadTree->Draw(Window);
+        m_Mutex.unlock();
+
+
         DrawTime();
+        DrawCount();
         Window.display();
     }
+    m_IsRunning = false;
 }
 
 void Application::Run() {
@@ -94,7 +139,12 @@ void Application::Run() {
     CreateWindow();
     GenerateField();
     CreateQuadTree();
-    Draw();
+    
+    std::thread updating_thread([this]{
+        UpdatingThreadFunc();
+    });
+    DrawingThreadFunc();
+    updating_thread.join();
 }
 
 Application &Application::Get() {
