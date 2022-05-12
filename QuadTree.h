@@ -25,7 +25,7 @@ private:
     size_t m_Level;
     bool m_IsDivided;
 
-    int m_MaxLevel = 9;
+    int m_MaxLevel = 5;
 
     std::vector<DefaultShape*> m_Children;
 
@@ -43,6 +43,8 @@ public:
     void Insert(DefaultShape *shape);
 
     void Find(const Rectangle& area, std::vector<DefaultShape*>& found) const;
+
+    void Reset();
 
     void Draw(sf::RenderTarget& target);
 };

@@ -91,8 +91,22 @@ void QuadTree::Find(const Rectangle& area, std::vector<DefaultShape*>& found) co
                     m_Children[i]->Y <= area.Y + area.Height / 2 - m_Children[i]->Height &&
                     m_Children[i]->Y >= area.Y - area.Height / 2) {
                     found.push_back(m_Children[i]);
+                    m_Children[i]->IsCheckedByTree = true;
                 }
             }
+        }
+    }
+}
+
+void QuadTree::Reset() {
+    if (m_IsDivided) {
+        m_TopLeft->Reset();
+        m_TopRight->Reset();
+        m_BottomLeft->Reset();
+        m_BottomRight->Reset();
+    } else {
+        for (auto i = 0; i < m_Children.size(); i++) {
+            m_Children[i]->IsCheckedByTree = false;
         }
     }
 }
