@@ -25,7 +25,7 @@ private:
     size_t m_Level;
     bool m_IsDivided;
 
-    int m_MaxLevel = 5;
+    int m_MaxLevel = 8;
 
     std::vector<DefaultShape*> m_Children;
 
@@ -34,9 +34,9 @@ public:
     QuadTree(const Rectangle& bounds, size_t capacity, size_t level) :
             m_TopLeft(nullptr), m_TopRight(nullptr), m_BottomLeft(nullptr), m_BottomRight(nullptr), m_IsDivided(false),
             m_Bounds(bounds), m_Capacity(capacity), m_Level(level) {
-        if (level >= m_MaxLevel) {
-            m_Capacity = 0;
-        }
+                if (level >= m_MaxLevel) {
+                    m_Capacity = 0;
+                }
     }
     ~QuadTree();
 

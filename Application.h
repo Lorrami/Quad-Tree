@@ -19,6 +19,7 @@ public:
     sf::Vector2f PreviousRealMousePosition;
     sf::Vector2f PreviousViewCenter;
     int Width, Height;
+    int QuadTreeDepth;
 private:
     sf::Clock m_Clock;
     sf::Font m_Font;
