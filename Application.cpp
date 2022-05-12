@@ -68,16 +68,6 @@ void Application::CheckCount() {
     m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
     m_Clock.restart();
     sf::View view = Window.getView();
-    // for(auto it : m_Objects) {
-    //    if (!(it->X - it->Width > view.getCenter().x + view.getSize().x ||
-    //         it->X + it->Width < view.getCenter().x - view.getSize().y ||
-    //         it->Y - it->Height > view.getCenter().y + view.getSize().x ||
-    //         it->Y + it->Height < view.getCenter().y - view.getSize().y))
-    //     {
-    //         m_VisibleObjects.push_back(it);
-    //         VisibleObjectsCount++;
-    //     }
-    // }
     m_QuadTree->Find(Rectangle(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2,
                                 view.getSize().x, view.getSize().y), m_VisibleObjects);
 }
@@ -101,8 +91,6 @@ void Application::DrawTime() {
 void Application::UpdatingThreadFunc() {
     while (m_IsRunning) {
         CheckCount();
-        std::cout << "Updating\n";
-        Render2D::MouseUpdate(&Window);
         m_Mutex.lock();
         DataBuffer::DrawableObjects = m_VisibleObjects;
         m_VisibleObjects.clear();
@@ -113,7 +101,7 @@ void Application::UpdatingThreadFunc() {
 void Application::DrawingThreadFunc() {
     while(Window.isOpen()) {
         HandleEvents();
-        std::cout << "Drawing\n";
+        Render2D::MouseUpdate(&Window);
         m_Scale = Window.getView().getSize().x / 1000.f;
 
         Window.clear();
@@ -124,7 +112,6 @@ void Application::DrawingThreadFunc() {
         if (m_IsQuadTreeDrawable) 
             m_QuadTree->Draw(Window);
         m_Mutex.unlock();
-
 
         DrawTime();
         DrawCount();
