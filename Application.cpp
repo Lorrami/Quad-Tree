@@ -77,15 +77,15 @@ void Application::DrawCount() {
     sf::Text count_text = sf::Text("Objects in view: " + std::to_string(DataBuffer::DrawableObjects.size()), m_Font, 30);
     count_text.setFillColor(sf::Color::White);
     count_text.setScale(sf::Vector2f(m_Scale, m_Scale));
-    count_text.setPosition(Window.getView().getCenter() + sf::Vector2f(-460.f * m_Scale, -290.f * m_Scale));
+    count_text.setPosition(Window.getView().getCenter() + sf::Vector2f(-500.f * m_Scale, -290.f * m_Scale));
     Window.draw(count_text);
 }
 
 void Application::DrawTime() {
-    sf::Text time_text = sf::Text(std::to_string(m_DeltaTime / 10), m_Font, 30);
+    sf::Text time_text = sf::Text("Time to search: " + std::to_string(m_DeltaTime), m_Font, 30);
     time_text.setFillColor(sf::Color::White);
     time_text.setScale(sf::Vector2f(m_Scale, m_Scale));
-    time_text.setPosition(Window.getView().getCenter() + sf::Vector2f(360.f * m_Scale, -290.f * m_Scale));
+    time_text.setPosition(Window.getView().getCenter() + sf::Vector2f(180.f * m_Scale, -290.f * m_Scale));
     Window.draw(time_text);
 }
 
