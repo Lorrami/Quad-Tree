@@ -6,6 +6,7 @@
 struct DefaultShape {
     float Width{}, Height{};
     float X{}, Y{};
+    bool IsCheckedByTree = false;
     ShapesType type = ShapesType::Default;
 
     virtual void Update(sf::RenderWindow *window) = 0;
