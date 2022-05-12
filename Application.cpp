@@ -68,7 +68,7 @@ void Application::CheckCount() {
     m_DeltaTime = m_Clock.getElapsedTime().asSeconds();
     m_Clock.restart();
     sf::View view = Window.getView();
-    m_QuadTree->Find(Rectangle(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2,
+    m_QuadTree->Find(Rectangle(view.getCenter().x, view.getCenter().y,
                                 view.getSize().x, view.getSize().y), m_VisibleObjects);
 }
 
