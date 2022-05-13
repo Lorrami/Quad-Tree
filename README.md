@@ -1,5 +1,7 @@
 # Quad Tree
 
+Sorry for the not clean code, but Im really tired
+
 **Includes**:  
 * quad tree data struct 
 * random 2D field generation  
