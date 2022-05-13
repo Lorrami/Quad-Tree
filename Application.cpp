@@ -70,7 +70,6 @@ void Application::CheckCount() {
     sf::View view = Window.getView();
     m_QuadTree->Find(Rectangle(view.getCenter().x, view.getCenter().y,
                                 view.getSize().x, view.getSize().y), m_VisibleObjects);
-    m_QuadTree->Reset();
 }
 
 void Application::DrawCount() {
@@ -92,6 +91,7 @@ void Application::DrawTime() {
 void Application::UpdatingThreadFunc() {
     while (m_IsRunning) {
         CheckCount();
+        m_QuadTree->Reset();
         m_Mutex.lock();
         DataBuffer::DrawableObjects = m_VisibleObjects;
         m_VisibleObjects.clear();
