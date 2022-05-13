@@ -2,7 +2,6 @@
 
 #include "RectangleShape.h"
 #include "CircleShape.h"
-#include "../Application.h"
 
 class ShapesFactory {
 public:

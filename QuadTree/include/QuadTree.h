@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "Shapes/Defaultshape.h"
+#include "Defaultshape.h"
 
 struct Rectangle {
     float X, Y;

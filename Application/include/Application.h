@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Shapes/Defaultshape.h"
-#include "Shapes/ShapesFactory.h"
+#include "Defaultshape.h"
+#include "ShapesFactory.h"
 #include "QuadTree.h"
 
 #include <mutex>
@@ -16,9 +16,6 @@ class Application {
 public:
     static Application *s_Instance;
     sf::RenderWindow Window{sf::VideoMode(1280, 720), "Quad Tree"};
-    sf::Vector2f PreviousRealMousePosition;
-    sf::Vector2f PreviousViewCenter;
-    int Width, Height;
     int QuadTreeDepth;
 private:
     sf::Clock m_Clock;

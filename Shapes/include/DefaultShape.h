@@ -9,7 +9,7 @@ struct DefaultShape {
     bool IsCheckedByTree = false;
     ShapesType type = ShapesType::Default;
 
-    virtual void Update(sf::RenderWindow *window) = 0;
+    virtual void Update(sf::RenderWindow *window, DefaultShape* obj) = 0;
 
     sf::Vector2f getPosition();
     sf::Vector2f getSize();

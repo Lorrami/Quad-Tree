@@ -1,5 +1,6 @@
-#include "Application.h"
+#include "../include/Application.h"
 #include "Render2D.h"
+#include "FieldShape.h"
 
 #include <iostream>
 
@@ -13,10 +14,11 @@ void Application::GetCount() {
 
 void Application::CreateWindow() {
     std::cout << "Enter width:";
-    std::cin >> Width;
+    std::cin >> FieldShape::Width;
     std::cout << "Enter height:";
-    std::cin >> Height;
-    m_Font.loadFromFile("../../Materials/Text1.ttf");
+    std::cin >> FieldShape::Height;
+    if (!m_Font.loadFromFile("Materials/Text1.ttf"))
+        std::cout << "FAILD TO LOAD TEXT FACE\n";
 }
 
 void Application::GenerateField() {
@@ -28,14 +30,17 @@ void Application::GenerateField() {
 }
 
 void Application::CreateQuadTree() {
-    if(Height != Width) {
-        if (Height > Width) {
-            m_QuadTree = new QuadTree(Rectangle(Height / 2, Height / 2, Height / 2, Height / 2), m_Capacity, 0);
+    if(FieldShape::Height != FieldShape::Width) {
+        if (FieldShape::Height > FieldShape::Width) {
+            m_QuadTree = new QuadTree(Rectangle(FieldShape::Height / 2, FieldShape::Height / 2, 
+                                                FieldShape::Height / 2, FieldShape::Height / 2), m_Capacity, 0);
         } else
-        if (Width > Height)
-            m_QuadTree = new QuadTree(Rectangle(Width / 2, Width / 2, Width / 2, Width / 2), m_Capacity, 0);
+        if (FieldShape::Width > FieldShape::Height)
+            m_QuadTree = new QuadTree(Rectangle(FieldShape::Width / 2, FieldShape::Width / 2,
+                                                FieldShape::Width / 2, FieldShape::Width / 2), m_Capacity, 0);
     } else 
-        m_QuadTree = new QuadTree(Rectangle(Width / 2, Height / 2, Width / 2, Height / 2), m_Capacity, 0);
+        m_QuadTree = new QuadTree(Rectangle(FieldShape::Width / 2, FieldShape::Height / 2,
+                                            FieldShape::Width / 2, FieldShape::Height / 2), m_Capacity, 0);
 
     for (auto it = m_Objects.begin(); it != m_Objects.end(); it++) {
         m_QuadTree->Insert(*it);
@@ -50,8 +55,8 @@ void Application::HandleEvents() {
             break;
         }    
         if (sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left) {
-            PreviousRealMousePosition = Window.mapPixelToCoords(sf::Mouse::getPosition(Window));
-            PreviousViewCenter = Window.getView().getCenter();
+            FieldShape::PreviousRealMousePosition = Window.mapPixelToCoords(sf::Mouse::getPosition(Window));
+            FieldShape::PreviousViewCenter = Window.getView().getCenter();
         }
         if (event.type == sf::Event::MouseWheelScrolled)
             Render2D::ZoomUpdate(&Window, event);
@@ -108,7 +113,7 @@ void Application::DrawingThreadFunc() {
         Window.clear();
         m_Mutex.lock();
         for (auto obj : DataBuffer::DrawableObjects) {
-            obj->Update(&Window);
+            obj->Update(&Window, obj);
         }
         if (m_IsQuadTreeDrawable) 
             m_QuadTree->Draw(Window);

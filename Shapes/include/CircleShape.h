@@ -5,5 +5,5 @@
 struct CircleShape : public DefaultShape {
     explicit CircleShape(float radius = 0.0f, float x = 1.0f, float y = 1.0f);
 
-    void Update(sf::RenderWindow *window)override;
+    void Update(sf::RenderWindow *window, DefaultShape* obj)override;
 };

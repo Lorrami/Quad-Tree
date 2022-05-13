@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Shapes/DefaultShape.h"
-#include "Shapes/RectangleShape.h"
-#include "Shapes/CircleShape.h"
-#include "Application.h"
+#include "DefaultShape.h"
+#include "RectangleShape.h"
+#include "CircleShape.h"
+#include "QuadTree.h"
 
 class Render2D {
 public:

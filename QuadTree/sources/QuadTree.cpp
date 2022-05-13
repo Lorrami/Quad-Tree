@@ -1,5 +1,4 @@
 #include "QuadTree.h"
-#include "Application.h"
 #include <iostream>
 
 bool Rectangle::Intersects(const Rectangle& other) const {
